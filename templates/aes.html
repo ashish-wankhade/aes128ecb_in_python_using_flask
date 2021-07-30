@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>
+        AES 128 ECB
+    </title>
+</head>
+<body>
+<h1>ENCRYPTION PART</h1>
+    <div class="content-section">
+        <form method="POST" action="" enctype="multipart/form-data">
+            <fieldset class="form-group">
+                {{ form.csrf_token }}
+                <div class="form-group mb-1">
+                    {{ form.encrypt(class="form-control form-control-lg is-invalid", placeholder='Input for Encryption') }}
+                </div>
+                <div class="form-group mb-1">
+                    {{ form.key_enc(class="form-control form-control-lg is-invalid", placeholder='Key') }}
+                </div>
+            </fieldset>
+            <div class="form-group mt-2">
+                {{ form.submit_enc(class="btn btn-outline-info") }}
+            </div>
+        </form>
+        <div class="media-body">
+            {% if enc_result %}
+                <p class="text-secondary">Encrypted Text - {{ enc_result }}</p>
+            {% endif %}
+        </div>
+
+    </div>
+<h1>DECRYPTION PART</h1>
+    <div class="content-section">
+        <form method="POST" action="" enctype="multipart/form-data">
+            <fieldset class="form-group">
+                <div class="form-group mb-1">
+                    {{ form.decrypt(class="form-control form-control-lg is-invalid", placeholder='Input for Decryption') }}
+                </div>
+                <div class="form-group mb-1">
+                    {{ form.key_dec(class="form-control form-control-lg is-invalid", placeholder='Key') }}
+                </div>
+            </fieldset>
+            <div class="form-group mt-2">
+                {{ form.submit_dec(class="btn btn-outline-info") }}
+            </div>
+        </form>
+        <div class="media-body">
+            {% if dec_result %}
+                <p class="text-secondary">Decrypted Text - {{ dec_result }}</p>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
