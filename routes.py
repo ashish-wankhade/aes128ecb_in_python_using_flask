@@ -18,7 +18,7 @@ class AESForm(FlaskForm):
 
 def hash_pad(ip, key):
     hashed_key = SHA256.new(key.encode()).digest()
-    print(hashed_key)
+    #print(hashed_key)
     extra = (16 - len(ip)) % 16
     pad = ip + extra * "."
     return hashed_key, pad
