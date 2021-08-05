@@ -2,11 +2,11 @@ from flask import render_template
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
 from aes128ecb import app
-from Cryptodome.Cipher import AES
-from Cryptodome.Hash import SHA256
+from Crypto.Cipher import AES
+from Crypto.Hash import SHA256
 
 
-//flask form to take user input
+#flask form to take user input
 class aesForm(FlaskForm):
     encrypt = StringField('Encryption IP')
     keyEncrypt = StringField('Key Encrypt')
@@ -17,18 +17,18 @@ class aesForm(FlaskForm):
     submitDecrypt = SubmitField('Submit')
 
     
-//function to hash the key and add padding to input text to make its length in multiple of 16
+#function to hash the key and add padding to input text to make its length in multiple of 16
 def hashPad(ip, key):
-    hashedKey = SHA256.new(key.encode()).digest()   //hashing the key
+    hashedKey = SHA256.new(key.encode()).digest()   #hashing the key
     addExtra = (16 - len(ip)) % 16
-    pad = ip + addExtra * "."                       //adding . at last on input to make its length in multiple of 16
+    pad = ip + addExtra * "."                       #adding . at last on input to make its length in multiple of 16
     return hashedKey, pad
 
 
 def encryptText(ip, key):
     encryptRequired = hashPad(ip, key)
     encryptedCipher = AES.new(encryptRequired[0], AES.MODE_ECB)
-    encrypted = encryptedCipher.encrypt(encryptRequired[1].encode("utf-8")) //encrypting the padded input with the key
+    encrypted = encryptedCipher.encrypt(encryptRequired[1].encode("utf-8")) #encrypting the padded input with the key
     # print(encrypted)
     return encrypted
 
@@ -36,13 +36,13 @@ def encryptText(ip, key):
 def decryptText(ip, key):
     decryptRequired = hashPad(ip, key)
     decryptedCipher = AES.new(decryptRequired[0], AES.MODE_ECB)
-    decrypted = decryptedCipher.decrypt(decryptRequired[1].encode("utf-8")) //decrypting the padded input with the key
+    decrypted = decryptedCipher.decrypt(decryptRequired[1].encode("utf-8")) #decrypting the padded input with the key
     # print(decrypted)
     return decrypted
 
 
 @app.route('/', methods=['GET', 'POST'])
-def aes_ecb():
+def aesECB():
     form = aesForm()
     userEncryptIp = form.encrypt.data
     keyEncryptIp = form.keyEncrypt.data
@@ -57,7 +57,7 @@ def aes_ecb():
         return render_template('aes.html', title='AES 128 ECB', form=form, encryptedResult=encrypted)
 
     if submitDecryptIp:
-        decrypted = decryptText(userDecryptIp, submitDecryptIp)
+        decrypted = decryptText(userDecryptIp, keyDecryptIp)
         return render_template('aes.html', title='AES 128 ECB', form=form, decryptedResult=decrypted)
 
     return render_template('aes.html', title='AES 128 ECB', form=form)
