@@ -54,10 +54,10 @@ def aes_ecb():
 
     if submitEncryptIp:
         encrypted = encryptText(userEncryptIp, keyEncryptIp)
-        return render_template('aes.html', title='AES 128 ECB', form=form, enc_result=encrypted)
+        return render_template('aes.html', title='AES 128 ECB', form=form, encryptedResult=encrypted)
 
     if submitDecryptIp:
         decrypted = decryptText(userDecryptIp, submitDecryptIp)
-        return render_template('aes.html', title='AES 128 ECB', form=form, dec_result=decrypted)
+        return render_template('aes.html', title='AES 128 ECB', form=form, decryptedResult=decrypted)
 
     return render_template('aes.html', title='AES 128 ECB', form=form)
