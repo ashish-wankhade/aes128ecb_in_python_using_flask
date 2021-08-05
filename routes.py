@@ -6,57 +6,58 @@ from Cryptodome.Cipher import AES
 from Cryptodome.Hash import SHA256
 
 
-class AESForm(FlaskForm):
+//flask form to take user input
+class aesForm(FlaskForm):
     encrypt = StringField('Encryption IP')
-    key_enc = StringField('Key Encrypt')
-    submit_enc = SubmitField('Submit')
+    keyEncrypt = StringField('Key Encrypt')
+    submitEncrypt = SubmitField('Submit')
 
     decrypt = StringField('Decryption IP')
-    key_dec = StringField('Key Decrypt')
-    submit_dec = SubmitField('Submit')
+    keyDecrypt = StringField('Key Decrypt')
+    submitDecrypt = SubmitField('Submit')
+
+    
+//function to hash the key and add padding to input text to make its length in multiple of 16
+def hashPad(ip, key):
+    hashedKey = SHA256.new(key.encode()).digest()   //hashing the key
+    addExtra = (16 - len(ip)) % 16
+    pad = ip + addExtra * "."                       //adding . at last on input to make its length in multiple of 16
+    return hashedKey, pad
 
 
-def hash_pad(ip, key):
-    hashed_key = SHA256.new(key.encode()).digest()
-    #print(hashed_key)
-    extra = (16 - len(ip)) % 16
-    pad = ip + extra * "."
-    return hashed_key, pad
-
-
-def encrypt_text(ip, key):
-    enc_req = hash_pad(ip, key)
-    enc_cipher = AES.new(enc_req[0], AES.MODE_ECB)
-    encrypted = enc_cipher.encrypt(enc_req[1].encode("utf-8"))
+def encryptText(ip, key):
+    encryptRequired = hashPad(ip, key)
+    encryptedCipher = AES.new(encryptRequired[0], AES.MODE_ECB)
+    encrypted = encryptedCipher.encrypt(encryptRequired[1].encode("utf-8")) //encrypting the padded input with the key
     # print(encrypted)
     return encrypted
 
 
-def decrypt_text(ip, key):
-    dec_req = hash_pad(ip, key)
-    de_cipher = AES.new(dec_req[0], AES.MODE_ECB)
-    decrypted = de_cipher.decrypt(dec_req[1].encode("utf-8"))
+def decryptText(ip, key):
+    decryptRequired = hashPad(ip, key)
+    decryptedCipher = AES.new(decryptRequired[0], AES.MODE_ECB)
+    decrypted = decryptedCipher.decrypt(decryptRequired[1].encode("utf-8")) //decrypting the padded input with the key
     # print(decrypted)
     return decrypted
 
 
 @app.route('/', methods=['GET', 'POST'])
 def aes_ecb():
-    form = AESForm()
-    user_ip_enc = form.encrypt.data
-    key_enc = form.key_enc.data
-    submit_enc = form.submit_enc.data
+    form = aesForm()
+    userEncryptIp = form.encrypt.data
+    keyEncryptIp = form.keyEncrypt.data
+    submitEncryptIp = form.submitEncrypt.data
 
-    user_ip_dec = form.decrypt.data
-    key_dec = form.key_dec.data
-    submit_dec = form.submit_dec.data
+    userDecryptIp = form.decrypt.data
+    keyDecryptIp = form.keyDecrypt.data
+    submitDecryptIp = form.submitDecrypt.data
 
-    if submit_enc:
-        encrypted = encrypt_text(user_ip_enc, key_enc)
+    if submitEncryptIp:
+        encrypted = encryptText(userEncryptIp, keyEncryptIp)
         return render_template('aes.html', title='AES 128 ECB', form=form, enc_result=encrypted)
 
-    if submit_dec:
-        decrypted = decrypt_text(user_ip_dec, key_dec)
+    if submitDecryptIp:
+        decrypted = decryptText(userDecryptIp, submitDecryptIp)
         return render_template('aes.html', title='AES 128 ECB', form=form, dec_result=decrypted)
 
     return render_template('aes.html', title='AES 128 ECB', form=form)
