@@ -15,11 +15,11 @@
                     {{ form.encrypt(class="form-control form-control-lg is-invalid", placeholder='Input for Encryption') }}
                 </div>
                 <div class="form-group mb-1">
-                    {{ form.key_enc(class="form-control form-control-lg is-invalid", placeholder='Key') }}
+                    {{ form.keyEncrypt(class="form-control form-control-lg is-invalid", placeholder='Key') }}
                 </div>
             </fieldset>
             <div class="form-group mt-2">
-                {{ form.submit_enc(class="btn btn-outline-info") }}
+                {{ form.submitEncrypt(class="btn btn-outline-info") }}
             </div>
         </form>
         <div class="media-body">
@@ -37,11 +37,11 @@
                     {{ form.decrypt(class="form-control form-control-lg is-invalid", placeholder='Input for Decryption') }}
                 </div>
                 <div class="form-group mb-1">
-                    {{ form.key_dec(class="form-control form-control-lg is-invalid", placeholder='Key') }}
+                    {{ form.keyDecrypt(class="form-control form-control-lg is-invalid", placeholder='Key') }}
                 </div>
             </fieldset>
             <div class="form-group mt-2">
-                {{ form.submit_dec(class="btn btn-outline-info") }}
+                {{ form.submitDecrypt(class="btn btn-outline-info") }}
             </div>
         </form>
         <div class="media-body">
